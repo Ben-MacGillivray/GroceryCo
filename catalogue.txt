@@ -1,0 +1,15 @@
+apple,0.80
+grapes,12.00
+pears,1.45
+steak,16.00
+chicken,15.50
+onion,1.25
+mushrooms,3.00
+beer,15.50,10.00
+wine,12.95,8.75
+rice,2.50
+pasta,6.75
+tomato sauce,4.65
+lettus,0.5
+eggs,2.60
+ham,4.40

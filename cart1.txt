@@ -1,0 +1,8 @@
+apple
+pear
+grapes
+steak
+eggs
+ham
+beer
+apple

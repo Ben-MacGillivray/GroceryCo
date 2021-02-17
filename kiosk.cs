@@ -14,6 +14,13 @@ namespace grocerystore
                 return;
             }
 
+            //create a list of food objects from the catalogue
+            string catalogueFile = args[0];
+            List<foodItem> catalogue = createCatalogue(catalogueFile);
+
+            //get the current datetime
+            DateTime startTime = DateTime.Now;
+
             while(true){
                 //get the name of the basket file from the user
                 System.Console.WriteLine("enter the name of the basket file or type 'q' to exit");
@@ -28,39 +35,26 @@ namespace grocerystore
                 if (!File.Exists(cartFile)){
                     System.Console.WriteLine("invalid file name.");
                     continue;
-                }     
+                }
 
-                checkout(cartFile, args[0]);       
+                //get the last moddified time
+                DateTime lastMod = File.GetLastWriteTime(catalogueFile);
+                int changed = DateTime.Compare(startTime, lastMod);
+
+                //if the catalogue has been updated during the program re-create it
+                if(changed < 0){
+                    startTime = lastMod;
+                    catalogue = createCatalogue(catalogueFile);
+                }
+
+                //perform the checkout
+                checkout(cartFile, catalogue);       
 
             }
 
         }
 
-        static void checkout(string cart, string catalogue){
-
-            //read in the content of the catalogue file  
-            string[] prices = File.ReadAllLines(catalogue);
-
-            //create a list of the items and their prices 
-            List<foodItem> catalogueList = new List<foodItem>();
-            foreach (string price in prices){
-                string[] catalogueInfo = price.Split(',');
-                string itemName = catalogueInfo[0];
-                string itemPrice = catalogueInfo[1];
-
-                //check if the item is on sale and add it to the list
-                if(catalogueInfo.Length > 2){
-                    string salePrice = catalogueInfo[2];
-                    grocerystore.foodItem foodObject = new foodItem(itemName, itemPrice, salePrice);
-                    catalogueList.Add(foodObject);
-                    continue;
-                }
-
-                //if the item isnt on sale add it to the list
-                grocerystore.foodItem foodObj = new foodItem(itemName, itemPrice);
-                catalogueList.Add(foodObj);
-
-            }
+        static void checkout(string cart, List<foodItem> catalogueList){
 
             //read in the content of the cart file
             string[] items = File.ReadAllLines(cart);  
@@ -98,6 +92,34 @@ namespace grocerystore
             //print final results
             receiptString = receiptString + "\nTotal = $" + totalPrice.ToString("0.00") + "\nThanks for shopping with us!\n\n";  
             System.Console.WriteLine(receiptString);
+        }
+
+        static List<foodItem> createCatalogue(string catalogue){
+
+            //read in the file
+            string[] prices = File.ReadAllLines(catalogue);
+
+            //create a list of the items and their prices 
+            List<foodItem> catalogueList = new List<foodItem>();
+            foreach(string price in prices){
+                string[] catalogueInfo = price.Split(',');
+                string itemName = catalogueInfo[0];
+                string itemPrice = catalogueInfo[1];
+
+                //check if the item is on sale and add it to the list
+                if(catalogueInfo.Length > 2){
+                    string salePrice = catalogueInfo[2];
+                    grocerystore.foodItem foodObject = new foodItem(itemName, itemPrice, salePrice);
+                    catalogueList.Add(foodObject);
+                    continue;
+                }
+
+                //if the item isnt on sale add it to the list
+                grocerystore.foodItem foodObj = new foodItem(itemName, itemPrice);
+                catalogueList.Add(foodObj);
+            }
+
+            return catalogueList;
         }
     }
 }

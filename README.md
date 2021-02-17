@@ -13,6 +13,8 @@ The expected format of the catalogue file is:
 item,price
 item,price,saleprice  if applicable
 
+with no whitespace at the bottom
+
 Apologies in advance if any of the syntax is not up to standard, this is my first time writing c#.
 
 Thanks for the opportunity to interview!

@@ -37,7 +37,7 @@ namespace grocerystore
                     continue;
                 }
 
-                //get the last moddified time
+                //get the last modified time
                 DateTime lastMod = File.GetLastWriteTime(catalogueFile);
                 int changed = DateTime.Compare(startTime, lastMod);
 
@@ -54,6 +54,9 @@ namespace grocerystore
 
         }
 
+        /**
+        Takes the name of the cart file and a list of foodItem objects and performs the checkout
+        */
         static void checkout(string cart, List<foodItem> catalogueList){
 
             //read in the content of the cart file
@@ -67,7 +70,7 @@ namespace grocerystore
                 int index = catalogueList.FindIndex(food => food.getItemName() == item);
 
                 //check if that item is in the catalogue
-                if(!(index >= 0))
+                if(index < 0)
                 {
                     //not sure how this should be handled so I just printed an error message
                     System.Console.WriteLine(item + " not found in the catalogue. I guess its free!!");
@@ -75,7 +78,7 @@ namespace grocerystore
                 }
                 else
                 {
-                    var food = catalogueList[index];
+                    foodItem food = catalogueList[index];
                     //check if there is a sale on the item
                     if (food.getSalePrice() < 0){
                         //item isnt on sale
@@ -94,6 +97,11 @@ namespace grocerystore
             System.Console.WriteLine(receiptString);
         }
 
+
+        /**
+        Read the catalogue file and create a list of food objects 
+        return: a list of foodItem objects
+        */
         static List<foodItem> createCatalogue(string catalogue){
 
             //read in the file

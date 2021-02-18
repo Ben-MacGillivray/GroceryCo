@@ -11,7 +11,7 @@ As you can see in the commit history, I initially had a slightly different imple
 The expected format of the catalogue file is: 
 
 item,price
-item,price,saleprice  if applicable
+item,price,saleprice  (if applicable)
 
 with no whitespace at the bottom
 
